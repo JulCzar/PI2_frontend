@@ -5,6 +5,6 @@ import './index.css';
 
 const ROOT = document.getElementById('root');
 
-const APP = <page.ListarHorario />;
+const APP = <page.CadastrarSala />;
 
 ReactDOM.render(APP, ROOT);
