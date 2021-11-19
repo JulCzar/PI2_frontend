@@ -1,10 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import * as page from './pages';
+import App from 'src/router';
 import './index.css';
 
 const ROOT = document.getElementById('root');
 
-const APP = <page.CadastrarSala />;
-
-ReactDOM.render(APP, ROOT);
+ReactDOM.render(<App />, ROOT);

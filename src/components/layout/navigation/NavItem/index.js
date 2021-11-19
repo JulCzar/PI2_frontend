@@ -1,11 +1,11 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
+const className =
+  'text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2';
 const NavItem = ({ href, label }) => (
-  <a
-    href={href}
-    className='text-lg no-underline text-grey-darkest hover:text-blue-dark ml-2'>
+  <Link to={href} className={className}>
     {label}
-  </a>
+  </Link>
 );
 
 export default NavItem;
