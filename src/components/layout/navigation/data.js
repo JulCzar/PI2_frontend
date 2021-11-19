@@ -1,6 +1,6 @@
 export const data = [
-  { key: 'navbar-item-1', label: 'Home', href: '/' },
-  { key: 'navbar-item-2', label: 'Cadastrar Horário', href: '/horario/new' },
-  { key: 'navbar-item-3', label: 'Cadastrar Sala', href: '/sala/new' },
-  { key: 'navbar-item-4', label: 'Horários', href: '/horario' },
+  { key: 'navbar-item-1', label: 'Cadastrar Semestre', href: '/semestre/new' },
+  { key: 'navbar-item-2', label: 'Cadastrar Sala', href: '/sala/new' },
+  { key: 'navbar-item-3', label: 'Lista Semestres', href: '/semestre' },
+  { key: 'navbar-item-4', label: 'Lista Salas', href: '/sala' },
 ];
