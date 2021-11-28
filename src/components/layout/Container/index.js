@@ -2,7 +2,7 @@ import React from 'react';
 
 /** @type {React.FC} */
 const Container = ({ children }) => (
-  <section className='container mx-auto p-6 font-mono'>{children}</section>
+  <section className='p-6 font-mono bg-gray-100 w-full'>{children}</section>
 );
 
 export default Container;

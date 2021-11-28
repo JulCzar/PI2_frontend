@@ -7,6 +7,8 @@ const Select = ({
   label,
   placeholder = 'Selecione...',
   className,
+  helperText,
+  error,
   ...rest
 }) => (
   <div className={className}>
@@ -18,6 +20,9 @@ const Select = ({
       styles={styles}
       {...rest}
     />
+    <p className={`text-xs italic${error ? ' text-red-500' : ''}`}>
+      {helperText}
+    </p>
   </div>
 );
 

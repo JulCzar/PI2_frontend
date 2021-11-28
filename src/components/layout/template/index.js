@@ -6,7 +6,9 @@ const Layout = ({ children, title, titlePosition = 'center' }) => (
     <Header />
 
     <Container>
-      <Title className={`text-${titlePosition} w-full`}>{title}</Title>
+      <Title className={`text-${titlePosition} w-full`}>
+        {title}
+      </Title>
       {children}
     </Container>
 

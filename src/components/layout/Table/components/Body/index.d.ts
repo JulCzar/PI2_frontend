@@ -6,7 +6,7 @@ export interface BodyItem<T> {
 
 export interface BodyProps<T = string> {
   data: BodyItem<T>[][];
-  renderItem?(data: BodyItem<T>): ReactElement<BodyItem<T>>;
+  renderItem?(data: BodyItem<T>, def?: JSX.Element): ReactElement<BodyItem<T>>;
 }
 
 declare const Body: FC<BodyProps>;
