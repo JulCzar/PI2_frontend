@@ -7,6 +7,9 @@ const Page = ({ text }) => <Layout title={text} />;
 function Routes() {
   const routes = useRoutes([
     { path: '/', element: <Page text='Home' /> },
+    { path: 'login', element: <pages.Login /> },
+    { path: 'usuario/:id', element: <pages.Perfil /> },
+    { path: 'usuario/:id/permissoes', element: <pages.AjustarPermissoes /> },
     { path: 'sala', element: <pages.ListarSala /> },
     { path: 'sala/new', element: <pages.CadastrarSala /> },
     { path: 'semestre', element: <pages.ListarSemestre /> },

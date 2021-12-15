@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-const selectItem = yup
+const SelectItem = yup
   .object({
     value: yup.string(),
     label: yup.string(),
@@ -9,15 +9,15 @@ const selectItem = yup
   .required('Selecione um Item');
 
 export const semesterValidation = yup.object({
-  full_name: yup.string().required('É necessário informar o período'),
-  curricular_matrix: selectItem,
-  course: selectItem,
-  campus: selectItem,
+  school_year: yup.string().required('É necessário informar o período'),
+  curricular_matrix: SelectItem,
+  course: SelectItem,
+  campus: SelectItem,
 });
 
 export const classroomValidation = yup.object({
-  building: selectItem,
-  campus: selectItem,
+  building: SelectItem,
+  campus: SelectItem,
   className: yup.string().required('É necessário informar o nome da Sala'),
   max_students: 0,
 });

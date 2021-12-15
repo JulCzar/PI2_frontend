@@ -8,13 +8,7 @@ const Detalhes = () => {
   const [data, setData] = React.useState([[]]);
   const { id } = useParams();
 
-  React.useEffect(() => {
-    (async () => {
-      const data = await getSemesterById(id);
-
-      setData(data);
-    })();
-  }, []);
+  React.useEffect(() => getSemesterById(id).then(setData), []);
 
   return (
     <Layout

@@ -8,11 +8,7 @@ const ListarSemestre = () => {
   const [items, setItems] = React.useState([]);
 
   React.useEffect(() => {
-    (async () => {
-      const semesters = await getSemesters();
-
-      setItems(semesters);
-    })();
+    getSemesters().then(setItems);
   }, []);
 
   return (

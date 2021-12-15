@@ -1,71 +1,131 @@
 import { useFormik } from 'formik';
 import React from 'react';
 import { Layout, Input, Select, Button, Form } from 'src/components';
+import { getMatrices } from 'src/services/matrices';
 import { createSemester } from 'src/services/semester';
+import { capitalizePhrase } from 'src/utils';
 import { semesterValidation } from 'src/validations';
 
 const CadastrarHorario = () => {
+  const [campusList, setCampusList] = React.useState([]);
+  const [matrices, setMatrices] = React.useState([]);
+
   const formik = useFormik({
     initialValues: {
-      full_name: '',
+      school_year: '',
       campus: null,
       course: null,
       curricular_matrix: null,
     },
     validationSchema: semesterValidation,
     async onSubmit(data) {
-      console.log({ data });
-      try {
-        await createSemester(data);
-      } catch (e) {}
+      console.log('entrou', data);
+      const { school_year, course, curricular_matrix } = data;
+
+      const body = {
+        school_year,
+        course_id: course.value,
+        matrix_curricular_id: curricular_matrix.value,
+      };
+
+      await createSemester(body);
     },
   });
+
+  React.useEffect(() => {
+    getMatrices().then(r => {
+      const { Resultados: res } = r.matrices;
+
+      const campus = [...new Set(res.map(r => capitalizePhrase(r.Campus)))].map(
+        s => ({ label: s, value: s })
+      );
+
+      setMatrices(res);
+      setCampusList(campus);
+    });
+  }, []);
+
+  const getCoursesList = () => {
+    const courses = matrices
+      .reduce((acc, act) => {
+        if (!acc.filter(m => m.CodCurso === act.CodCurso).length)
+          return [...acc, act];
+        return acc;
+      }, [])
+      .filter(m => capitalizePhrase(m.Campus) === formik.values.campus?.value)
+      .map(m => ({ value: m.CodCurso, label: m.Curso }));
+
+    return courses;
+  };
+
+  const getMatricesList = () => {
+    const matricesList = matrices
+      .reduce((acc, act) => {
+        if (!acc.filter(m => m.Matriz === act.Matriz).length)
+          return [...acc, act];
+        return acc;
+      }, [])
+      .filter(m => m.CodCurso === formik.values.course?.value)
+      .map(m => ({ value: m.Matriz, label: m.Matriz }));
+
+    return matricesList;
+  };
 
   const handleSelectChange = name => evt => {
     formik.setFieldValue(name, evt);
   };
 
   return (
-    <Layout title='Cadastro'>
+    <Layout title='Cadastro de Semestre'>
       <div className='container max-w-screen-lg mx-auto'>
         <Form onSubmit={formik.handleSubmit}>
           <Input
             className='md:col-span-6'
             onChange={formik.handleChange}
-            value={formik.values.full_name}
-            error={Boolean(formik.errors.full_name)}
-            helperText={formik.errors.full_name}
-            name='full_name'
+            value={formik.values.school_year}
+            error={Boolean(formik.errors.school_year)}
+            helperText={formik.errors.school_year}
+            name='school_year'
             label='Período Letivo'
           />
           <Select
-            onChange={handleSelectChange('campus')}
+            onChange={(...rest) => {
+              const onChangeCallback = handleSelectChange('campus');
+
+              formik.setFieldValue('course', null);
+              formik.setFieldValue('curricular_matrix', null);
+
+              onChangeCallback(...rest);
+            }}
             error={Boolean(formik.errors.campus)}
             helperText={formik.errors.campus}
             value={formik.values.campus}
             className='md:col-span-3'
+            options={campusList}
             label='Campus'
             name='campus'
-            options={[{ label: 'Palmas', value: '1' }]}
           />
           <Select
-            onChange={handleSelectChange('course')}
+            onChange={(...rest) => {
+              const onChangeCallback = handleSelectChange('course');
+
+              formik.setFieldValue('curricular_matrix', null);
+
+              onChangeCallback(...rest);
+            }}
             value={formik.values.course}
             className='md:col-span-3'
             label='Curso'
             name='course'
-            options={[{ label: 'Sistemas de Informação', value: '1' }]}
+            options={getCoursesList()}
           />
           <Select
             onChange={handleSelectChange('curricular_matrix')}
             value={formik.values.curricular_matrix}
+            options={getMatricesList()}
             className='md:col-span-6'
             label='Matriz Curricular'
             name='curricular_matrix'
-            options={[
-              { label: 'Antiga', value: '1' },
-              { label: 'Nova', value: '2' },
-            ]}
           />
 
           <div className='justify-end flex mt-5 md:col-span-6 gap-x-1'>

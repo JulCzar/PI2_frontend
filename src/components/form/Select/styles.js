@@ -9,7 +9,7 @@ export const styles = {
   }),
   control: provided => ({
     ...provided,
-    height: 40,
+    minHeight: 40,
     background: '#f9fafb',
     borderColor: '#e5e7eb',
     ':hover': {

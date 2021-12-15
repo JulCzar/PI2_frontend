@@ -1,8 +1,8 @@
 import { api } from 'src/http/api';
 
 /**
- * 
- * @returns 
+ *
+ * @returns
  */
 export const getSemesters = async () => {
   try {
@@ -15,13 +15,10 @@ export const getSemesters = async () => {
   }
 };
 
-/**
- * 
- * @param {*} semester semester object
- */
+/** @param {*} semester semester object */
 export const createSemester = async semester => {
   try {
-    await api.get('/semester/store', semester);
+    await api.post('/semester/store', semester);
   } catch (e) {
     console.warn(e);
     throw e;
@@ -29,29 +26,43 @@ export const createSemester = async semester => {
 };
 
 /**
- * 
- * @param {string} id 
- * @param {*} semester semester object
- */
-export const updateSemester = async (id, semester) => {
-  try {
-    await api.get(`/semester/${id}/update`, semester);
-  } catch (e) {
-    console.warn(e);
-    throw e;
-  }
-};
-
-/**
- * 
- * @param {string} id 
- * @returns 
+ *
+ * @param {string} id
+ * @returns
  */
 export const getSemesterById = async id => {
   try {
     const { data } = await api.get(`/semester/${id}/show`);
 
     return data;
+  } catch (e) {
+    console.warn(e);
+    throw e;
+  }
+};
+
+/**
+ *
+ * @param {string} id
+ * @param {*} semester semester object
+ */
+export const updateSemester = async (id, semester) => {
+  try {
+    await api.put(`/semester/${id}/update`, semester);
+  } catch (e) {
+    console.warn(e);
+    throw e;
+  }
+};
+
+/**
+ *
+ * @param {string} id
+ * @param {*} semester semester object
+ */
+export const deleteSemester = async id => {
+  try {
+    await api.delete(`/semester/${id}/delete`);
   } catch (e) {
     console.warn(e);
     throw e;
