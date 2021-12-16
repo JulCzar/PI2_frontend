@@ -11,7 +11,6 @@ export const getClassroomTypes = async () => {
     return data;
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -21,7 +20,6 @@ export const createClassroomType = async classroomType => {
     await api.post('/classroomTypes/store', classroomType);
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -37,7 +35,6 @@ export const getClassroomTypeById = async id => {
     return data;
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -51,7 +48,6 @@ export const updateClassroomType = async (id, classroomType) => {
     await api.put(`/classroomTypes/${id}/update`, classroomType);
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -65,6 +61,5 @@ export const deleteClassroomType = async id => {
     await api.delete(`/classroomTypes/${id}/delete`);
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };

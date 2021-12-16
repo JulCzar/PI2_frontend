@@ -6,7 +6,6 @@ export const getGroups = async () => {
     return data;
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -15,7 +14,6 @@ export const createGroup = async payload => {
     await api.post('/group', payload);
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -24,7 +22,6 @@ export const editGroup = async payload => {
     await api.put('/group', payload);
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -33,6 +30,5 @@ export const deleteGroup = async id => {
     await api.delete(`/group/${id}`);
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };

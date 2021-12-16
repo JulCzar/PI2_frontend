@@ -5,7 +5,6 @@ export const getCourses = async () => {
     const { data } = await api.get('/course');
     return data;
   } catch (e) {
-    console.warn(e);
-    throw e;
+    console.warn(e)
   }
 };

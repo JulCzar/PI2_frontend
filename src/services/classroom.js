@@ -11,7 +11,6 @@ export const getClassrooms = async () => {
     return data;
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -21,7 +20,6 @@ export const createClassroom = async classroom => {
     await api.post('/classroom/store', classroom);
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -37,7 +35,6 @@ export const getClassroomById = async id => {
     return data;
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -51,7 +48,6 @@ export const updateClassroom = async (id, classroom) => {
     await api.put(`/classroom/${id}/update`, classroom);
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -65,6 +61,5 @@ export const deleteClassroom = async id => {
     await api.delete(`/classroom/${id}/delete`);
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };

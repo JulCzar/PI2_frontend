@@ -21,10 +21,7 @@ const CadastrarSala = () => {
     },
     validationSchema: classroomValidation,
     async onSubmit(data) {
-      console.log(data);
-      try {
-        await createClassroom(data);
-      } catch (e) {}
+      createClassroom(data).catch();
     },
   });
 

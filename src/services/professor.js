@@ -7,6 +7,15 @@ export const getProfessors = async () => {
     return data;
   } catch (e) {
     console.warn(e);
-    throw e;
+  }
+};
+
+export const getProfessorByName = async name => {
+  try {
+    const { data } = await api.get(['/professors', name].join('/'));
+
+    return data;
+  } catch (e) {
+    console.warn(e);
   }
 };

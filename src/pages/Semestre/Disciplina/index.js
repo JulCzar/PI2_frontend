@@ -1,19 +1,16 @@
 import React from 'react';
 import { Layout } from 'src/components';
+import { useDisclosure } from 'src/hooks';
 import Modal from './Modal';
 import CTable from './Table';
 
 function Disciplina() {
-  const [isOpen, setOpen] = React.useState(false);
-
-  const openModal = () => {
-    setOpen(true);
-  };
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   return (
     <Layout title='Períodos'>
-      <CTable onOpen={openModal} />
-      {isOpen && <Modal onClose={() => setOpen(false)} />}
+      <CTable onOpen={onOpen} />
+      {isOpen && <Modal onClose={onClose} />}
     </Layout>
   );
 }

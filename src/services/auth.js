@@ -5,7 +5,6 @@ export const register = async user => {
     await api.post('/register', user);
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -23,7 +22,6 @@ export const login = async (email, password) => {
     return data;
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -34,6 +32,5 @@ export const getProfile = async id => {
     return data;
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };

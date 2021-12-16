@@ -11,7 +11,6 @@ export const getSemesters = async () => {
     return data;
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -21,7 +20,6 @@ export const createSemester = async semester => {
     await api.post('/semester/store', semester);
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -37,7 +35,6 @@ export const getSemesterById = async id => {
     return data;
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -51,7 +48,6 @@ export const updateSemester = async (id, semester) => {
     await api.put(`/semester/${id}/update`, semester);
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
 
@@ -65,6 +61,5 @@ export const deleteSemester = async id => {
     await api.delete(`/semester/${id}/delete`);
   } catch (e) {
     console.warn(e);
-    throw e;
   }
 };
