@@ -1,9 +1,14 @@
-import { FormikConsumer, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import React from 'react';
 import { Button, Select } from 'src/components';
 import { getProfessors } from 'src/services/professor';
+import { getClassrooms } from 'src/services/classroom';
 import { capitalizePhrase } from 'src/utils';
 import { FaPlusCircle, FaTrash } from 'react-icons/fa';
+import { useComponentKey } from 'src/hooks';
+import { getMatrices } from 'src/services/matrices';
+import Loading from 'src/pages/Loading';
+import { createOfferSubject } from 'src/services/offerSubject';
 
 const getWeek = () => ({
   subject: '',
@@ -14,29 +19,72 @@ const getWeek = () => ({
   offer_subject_on_weekdays: null,
 });
 
-function Modal({ onClose }) {
+function Modal({ isOpen, onClose }) {
+  const key = useComponentKey('Modal');
+  const [disciplines, setDisciplines] = React.useState([]);
+  const [classrooms, setClassrooms] = React.useState([]);
   const [professors, setProfessors] = React.useState([]);
+  const [isLoading, setLoading] = React.useState(true);
   const formik = useFormik({
     initialValues: {
-      days: [getWeek()],
+      offer_subjects: [getWeek()],
     },
     onSubmit(data) {
-      console.log(data);
+      const payload = data.offer_subjects.map(os => ({
+        semester_id: isOpen,
+        weekday_id: os.week_day.value,
+        shift_id: os.shift.value,
+        professor: os.professor.value,
+        classroom_id: os.classroom.value,
+        subject: os.subject.value,
+        offer_subject_time_on_weekdays: os.offer_subject_on_weekdays.map(i => ({
+          position: i.value,
+        })),
+      }));
+
+      createOfferSubject(payload);
     },
   });
 
   React.useEffect(() => {
-    getProfessors().then(p => setProfessors(p.professors.Resultados));
+    Promise.all([
+      getClassrooms().then(c =>
+        setClassrooms(
+          c?.classrooms.map(c => c.name).map(c => ({ label: c, value: c }))
+        )
+      ),
+      getProfessors().then(p => setProfessors(p?.professors.Resultados)),
+      getMatrices().then(m => {
+        const availableDisciplines = m?.matrices.Resultados.reduce(
+          (acc, act) => {
+            if (!acc.filter(m => m.CodDisc === act.CodDisc).length)
+              return [...acc, act];
+            return acc;
+          },
+          []
+        )
+          // .filter(m => m.Curso === currentCourse)
+          .map(m => ({
+            value: m.CodDisc,
+            label: capitalizePhrase(m.Disciplina),
+          }));
+
+        setDisciplines(availableDisciplines);
+      }),
+    ]).finally(setLoading(false));
   }, []);
 
   const addDay = () => {
-    formik.setFieldValue('days', [...formik.values.days, getWeek()]);
+    formik.setFieldValue('offer_subjects', [
+      ...formik.values.offer_subjects,
+      getWeek(),
+    ]);
   };
 
   const removeFromDays = index => () => {
     formik.setFieldValue(
-      'days',
-      formik.values.days.filter((_, i) => i !== index)
+      'offer_subjects',
+      formik.values.offer_subjects.filter((_, i) => i !== index)
     );
   };
 
@@ -55,21 +103,23 @@ function Modal({ onClose }) {
 
   const handleSelectChange = (name, index) => ({
     onChange(value) {
-      const copyOfDays = [...formik.values.days];
+      const copyOfDays = [...formik.values.offer_subjects];
 
       copyOfDays[index][name] = value;
 
-      console.log(copyOfDays);
       formik.setFieldValue(copyOfDays);
     },
-    value: formik.values.days[index][name],
+    value: formik.values.offer_subjects[index][name],
   });
+
+  if (!isOpen) return null;
 
   return (
     <div
       className='main-modal fixed w-full h-100 inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster'
       style={{ background: 'rgba(0,0,0,.7)' }}
       onClick={onClose}>
+      {isLoading && <Loading />}
       <div className='border border-teal-500 shadow-lg modal-container bg-white rounded overflow-y-none'>
         <div className='modal-content py-4 text-left px-6'>
           <div onClick={e => e.stopPropagation()}>
@@ -79,20 +129,19 @@ function Modal({ onClose }) {
               </h2>
               <div className='mt-6 grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-2'>
                 <form className='lg:col-span-2' onSubmit={formik.handleSubmit}>
-                  {formik.values.days.map((day, i) => (
-                    <div className='flex items-end gap-x-3'>
+                  {formik.values.offer_subjects.map((_, i) => (
+                    <div
+                      key={`${key}-row-${i}`}
+                      className='flex items-end gap-x-3'>
                       <div
-                        key={`form-item-${i}`}
+                        key={`form-item-${key}-${i}`}
                         className='grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-12 mt-3 w-full'>
                         <Select
                           {...handleSelectChange('subject', i)}
                           className='md:col-span-2'
+                          options={disciplines}
                           label='Disciplina'
                           name='subject'
-                          options={[
-                            { label: 'teste 1', value: '1' },
-                            { label: 'teste 2', value: '2' },
-                          ]}
                         />
                         <Select
                           {...handleSelectChange('professor', i)}
@@ -104,9 +153,9 @@ function Modal({ onClose }) {
                         <Select
                           {...handleSelectChange('classroom', i)}
                           className='md:col-span-2'
+                          options={classrooms}
                           name='classroom'
                           label='Sala'
-                          options={[]}
                         />
                         <Select
                           {...handleSelectChange('shift', i)}
@@ -169,7 +218,7 @@ function Modal({ onClose }) {
                     </Button>
                   </div>
                   <div className='mt-5 md:col-span-full flex justify-end'>
-                    <Button>Adicionar Semana</Button>
+                    <Button type='submit'>Adicionar Semana</Button>
                   </div>
                 </form>
               </div>

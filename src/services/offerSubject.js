@@ -8,3 +8,11 @@ export const getOfferSubjects = async () => {
     console.warn(e);
   }
 };
+
+export const createOfferSubject = async () => {
+  try {
+    await api.post('/offersubject/store');
+  } catch (e) {
+    console.warn(e);
+  }
+};

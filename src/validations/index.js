@@ -18,6 +18,7 @@ export const semesterValidation = yup.object({
 export const classroomValidation = yup.object({
   building: SelectItem,
   campus: SelectItem,
-  className: yup.string().required('É necessário informar o nome da Sala'),
+  description: yup.string(),
+  name: yup.string().required('É necessário informar o nome da Sala'),
   max_students: 0,
 });

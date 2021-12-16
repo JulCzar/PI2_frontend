@@ -10,7 +10,7 @@ const Table = ({ onOpen }) => {
         header={headerItems}
         body={{
           data: bodyItems,
-          renderItem: (_, pos, def) =>
+          renderItem: (_, pos, def, i) =>
             !pos ? (
               def
             ) : (
@@ -19,7 +19,7 @@ const Table = ({ onOpen }) => {
                   Zerar Disciplina
                 </button>
                 <button
-                  onClick={onOpen}
+                  onClick={onOpen(i + 1)}
                   className='text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-blue hover:bg-blue-dark'>
                   Ofertar Disciplina
                 </button>

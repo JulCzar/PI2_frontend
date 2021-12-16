@@ -6,7 +6,7 @@ import { api } from 'src/http/api';
  */
 export const getClassrooms = async () => {
   try {
-    const { data } = await api.get('/classroom');
+    const { data } = await api.get('/classrooms');
 
     return data;
   } catch (e) {

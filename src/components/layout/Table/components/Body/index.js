@@ -16,7 +16,9 @@ const Body = ({ data, renderItem }) => {
               <td
                 key={`t-${bodyID}-row-item-${pos}`}
                 className='px-4 py-3 border'>
-                {!renderItem ? defaultItem : renderItem(item, pos, defaultItem)}
+                {!renderItem
+                  ? defaultItem
+                  : renderItem(item, pos, defaultItem, i)}
               </td>
             );
           })}

@@ -1,6 +1,7 @@
 import { useFormik } from 'formik';
 import React from 'react';
 import { Layout, Input, Select, Button, Form } from 'src/components';
+import Loading from 'src/pages/Loading';
 import { getMatrices } from 'src/services/matrices';
 import { createSemester } from 'src/services/semester';
 import { capitalizePhrase } from 'src/utils';
@@ -8,6 +9,7 @@ import { semesterValidation } from 'src/validations';
 
 const CadastrarHorario = () => {
   const [campusList, setCampusList] = React.useState([]);
+  const [isLoading, setLoading] = React.useState(true);
   const [matrices, setMatrices] = React.useState([]);
 
   const formik = useFormik({
@@ -24,7 +26,7 @@ const CadastrarHorario = () => {
 
       const body = {
         school_year,
-        course_id: course.value,
+        course: course.value,
         matrix_curricular_id: curricular_matrix.value,
       };
 
@@ -33,16 +35,18 @@ const CadastrarHorario = () => {
   });
 
   React.useEffect(() => {
-    getMatrices().then(r => {
-      const { Resultados: res } = r.matrices;
+    getMatrices()
+      .then(r => {
+        const { Resultados: res } = r.matrices;
 
-      const campus = [...new Set(res.map(r => capitalizePhrase(r.Campus)))].map(
-        s => ({ label: s, value: s })
-      );
+        const campus = [
+          ...new Set(res.map(r => capitalizePhrase(r.Campus))),
+        ].map(s => ({ label: s, value: s }));
 
-      setMatrices(res);
-      setCampusList(campus);
-    });
+        setMatrices(res);
+        setCampusList(campus);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const getCoursesList = () => {
@@ -77,6 +81,7 @@ const CadastrarHorario = () => {
 
   return (
     <Layout title='Cadastro de Semestre'>
+      {isLoading && <Loading />}
       <div className='container max-w-screen-lg mx-auto'>
         <Form onSubmit={formik.handleSubmit}>
           <Input
