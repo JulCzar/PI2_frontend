@@ -8,7 +8,9 @@ const ListarSemestre = () => {
   const [items, setItems] = React.useState([]);
 
   React.useEffect(() => {
-    getSemesters().then(setItems);
+    getSemesters().then(s =>
+      setItems(s.semesters.map(s => [{ item: s.school_year }, { item: s.id }]))
+    );
   }, []);
 
   return (
@@ -17,8 +19,9 @@ const ListarSemestre = () => {
         <Table
           header={headerItems}
           body={{
-            data: bodyItems,
-            renderItem: (_, pos, def) => {
+            data: items,
+            renderItem: (sem, pos, def) => {
+              console.log(sem);
               return !pos ? (
                 def
               ) : (
@@ -34,12 +37,12 @@ const ListarSemestre = () => {
                     Remover
                   </a>
                   <Link
-                    to='/semestre/disciplina/id'
+                    to={`/semestre/disciplina/${sem}`}
                     className='text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-blue hover:bg-blue-dark'>
                     Períodos
                   </Link>
                   <Link
-                    to='/semestre/id'
+                    to='/semestre/sem.id'
                     className='text-grey-lighter font-bold py-1 px-3 rounded text-xs bg-blue hover:bg-blue-dark'>
                     Horários
                   </Link>

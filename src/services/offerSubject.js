@@ -9,9 +9,9 @@ export const getOfferSubjects = async () => {
   }
 };
 
-export const createOfferSubject = async () => {
+export const createOfferSubject = async payload => {
   try {
-    await api.post('/offersubject/store');
+    await api.post('/offersubject/store', payload);
   } catch (e) {
     console.warn(e);
   }

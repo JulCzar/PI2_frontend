@@ -6,7 +6,7 @@ import { api } from 'src/http/api';
  */
 export const getSemesters = async () => {
   try {
-    const { data } = await api.get('/semester');
+    const { data } = await api.get('/semesters');
 
     return data;
   } catch (e) {

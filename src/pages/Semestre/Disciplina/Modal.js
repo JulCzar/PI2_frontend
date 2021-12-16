@@ -42,16 +42,14 @@ function Modal({ isOpen, onClose }) {
         })),
       }));
 
-      createOfferSubject(payload);
+      createOfferSubject({ offer_subjects: payload, period: isOpen });
     },
   });
 
   React.useEffect(() => {
     Promise.all([
       getClassrooms().then(c =>
-        setClassrooms(
-          c?.classrooms.map(c => c.name).map(c => ({ label: c, value: c }))
-        )
+        setClassrooms(c?.classrooms.map(c => ({ label: c.name, value: c.id })))
       ),
       getProfessors().then(p => setProfessors(p?.professors.Resultados)),
       getMatrices().then(m => {

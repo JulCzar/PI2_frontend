@@ -6,7 +6,7 @@ const Loading = () => {
       style={{
         background: '#0003',
         position: 'fixed',
-        zIndex: 10,
+        zIndex: 1000,
         height: '100vh',
         width: '100vw',
         left: 0,
