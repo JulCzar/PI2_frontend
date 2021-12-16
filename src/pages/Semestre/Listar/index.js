@@ -1,27 +1,33 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Table } from 'src/components';
+import Loading from 'src/pages/Loading';
 import { getSemesters } from 'src/services/semester';
-import { bodyItems, headerItems } from './mock';
+import { headerItems } from './mock';
 
 const ListarSemestre = () => {
   const [items, setItems] = React.useState([]);
+  const [isLoading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    getSemesters().then(s =>
-      setItems(s.semesters.map(s => [{ item: s.school_year }, { item: s.id }]))
-    );
+    getSemesters()
+      .then(s =>
+        setItems(
+          s.semesters.map(s => [{ item: s.school_year }, { item: s.id }])
+        )
+      )
+      .finally(() => setLoading(false));
   }, []);
 
   return (
     <Layout title='Semestres'>
+      {isLoading && <Loading />}
       <div className='w-2/3 mx-auto'>
         <Table
           header={headerItems}
           body={{
             data: items,
             renderItem: (sem, pos, def) => {
-              console.log(sem);
               return !pos ? (
                 def
               ) : (
