@@ -1,6 +1,7 @@
 import { useFormik } from 'formik';
 import React from 'react';
 import { Layout, Input, Select, Button, Form } from 'src/components';
+import { useLoading } from 'src/hooks/useLoading';
 import Loading from 'src/pages/Loading';
 import { getMatrices } from 'src/services/matrices';
 import { createSemester } from 'src/services/semester';
@@ -9,7 +10,7 @@ import { semesterValidation } from 'src/validations';
 
 const CadastrarHorario = () => {
   const [campusList, setCampusList] = React.useState([]);
-  const [isLoading, setLoading] = React.useState(true);
+  const { isLoading, endLoading } = useLoading();
   const [matrices, setMatrices] = React.useState([]);
 
   const formik = useFormik({
@@ -21,7 +22,6 @@ const CadastrarHorario = () => {
     },
     validationSchema: semesterValidation,
     async onSubmit(data) {
-      console.log('entrou', data);
       const { school_year, course, curricular_matrix } = data;
 
       const body = {
@@ -37,6 +37,8 @@ const CadastrarHorario = () => {
   React.useEffect(() => {
     getMatrices()
       .then(r => {
+        if (!r?.matrices) return;
+
         const { Resultados: res } = r.matrices;
 
         const campus = [
@@ -46,7 +48,7 @@ const CadastrarHorario = () => {
         setMatrices(res);
         setCampusList(campus);
       })
-      .finally(() => setLoading(false));
+      .finally(endLoading);
   }, []);
 
   const getCoursesList = () => {
@@ -81,7 +83,7 @@ const CadastrarHorario = () => {
 
   return (
     <Layout title='Cadastro de Semestre'>
-      {isLoading && <Loading />}
+      <Loading isLoading={isLoading} />
       <div className='container max-w-screen-lg mx-auto'>
         <Form onSubmit={formik.handleSubmit}>
           <Input

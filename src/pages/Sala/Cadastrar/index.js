@@ -7,11 +7,12 @@ import { getMatrices } from 'src/services/matrices';
 import { capitalizePhrase } from 'src/utils';
 import { classroomValidation } from 'src/validations';
 import Loading from 'src/pages/Loading';
+import { useLoading } from 'src/hooks/useLoading';
 
 const CadastrarSala = () => {
   const [campusList, setCampusList] = React.useState([]);
   const [buildings, setBuildings] = React.useState([]);
-  const [isLoading, setLoading] = React.useState(true);
+  const { isLoading, endLoading } = useLoading();
 
   const formik = useFormik({
     initialValues: {
@@ -45,7 +46,7 @@ const CadastrarSala = () => {
       getBuildings().then(b => {
         setBuildings(b?.buildings.map(b => ({ value: b.name, label: b.name })));
       }),
-    ]).finally(() => setLoading(false));
+    ]).finally(endLoading);
   }, []);
 
   const handleSelectChange = name => evt => {
@@ -54,7 +55,7 @@ const CadastrarSala = () => {
 
   return (
     <Layout title='Cadastro de Sala'>
-      {isLoading && <Loading />}
+      <Loading isLoading={isLoading} />
       <div className='container bg-gray-100 max-w-screen-lg mx-auto'>
         <Form onSubmit={formik.handleSubmit}>
           <Input

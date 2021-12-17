@@ -9,6 +9,7 @@ import { useComponentKey } from 'src/hooks';
 import { getMatrices } from 'src/services/matrices';
 import Loading from 'src/pages/Loading';
 import { createOfferSubject } from 'src/services/offerSubject';
+import { useLoading } from 'src/hooks/useLoading';
 
 const getWeek = () => ({
   subject: '',
@@ -24,7 +25,7 @@ function Modal({ isOpen, onClose }) {
   const [disciplines, setDisciplines] = React.useState([]);
   const [classrooms, setClassrooms] = React.useState([]);
   const [professors, setProfessors] = React.useState([]);
-  const [isLoading, setLoading] = React.useState(true);
+  const { isLoading, endLoading } = useLoading();
   const formik = useFormik({
     initialValues: {
       offer_subjects: [getWeek()],
@@ -69,7 +70,7 @@ function Modal({ isOpen, onClose }) {
 
         setDisciplines(availableDisciplines);
       }),
-    ]).finally(setLoading(false));
+    ]).finally(endLoading);
   }, []);
 
   const addDay = () => {
@@ -117,7 +118,7 @@ function Modal({ isOpen, onClose }) {
       className='main-modal fixed w-full h-100 inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster'
       style={{ background: 'rgba(0,0,0,.7)' }}
       onClick={onClose}>
-      {isLoading && <Loading />}
+      <Loading isLoading={isLoading} />
       <div className='border border-teal-500 shadow-lg modal-container bg-white rounded overflow-y-none'>
         <div className='modal-content py-4 text-left px-6'>
           <div onClick={e => e.stopPropagation()}>

@@ -1,6 +1,8 @@
 import React from 'react';
 
-const Loading = () => {
+const Loading = ({ isLoading }) => {
+  if (!isLoading) return null;
+
   return (
     <div
       style={{

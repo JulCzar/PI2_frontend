@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router';
 import { getSemesterById } from 'src/services/semester';
-import { Layout } from '../../../components';
+import { Layout } from 'src/components';
 import Table from './Table';
 
 const Detalhes = () => {
